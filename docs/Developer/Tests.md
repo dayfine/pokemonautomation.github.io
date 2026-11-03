@@ -51,6 +51,16 @@ CommandLineTests/                          <- root test folder. This name needs 
 
 Instead of modifying the json config file, you can add the command lines `--command-line-test-mode --command-line-test-folder FOLDER` to execute the tests. It can be more convenient for places likes CI where modifying a config file is not easy.
 
+### Run tests with SerialProgramsTests
+
+The build also makes `SerialProgramsTests`, an executable that runs the same unit tests without the GUI. It reads no settings and does not scan serial ports or cameras, so it can run while **SerialPrograms** is open. It is built by default; configure with `-DTEST_RUNNER_EXE=OFF` to skip it. Build it alone with `ninja SerialProgramsTests` (or `cmake --build <build folder> --target SerialProgramsTests`); it lands next to `SerialPrograms` in the build folder.
+
+```
+SerialProgramsTests [--filter <text>]... [--list] [--augment-color-distortions]
+```
+
+`--filter` selects the tests whose names contain the text and can be repeated; `--list` prints the selected test names instead of running them. The exit code is the number of failed tests (at most 254), or 255 for a bad argument or when no test matches. Image tests need the test images from the CommandLineTests repository in a `UnitTestResources/` (or `CommandLineTests/`) folder in or above the executable's folder; without them they fail with `FileException`.
+
 ### Find Test Code for Test File
 
 When running in the test mode, it will go to find each file in the folder recursively.
